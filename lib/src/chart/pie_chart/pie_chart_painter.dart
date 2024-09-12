@@ -419,8 +419,8 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
         // Calculate the offset based on the angle and position the text above the connector line
         final Offset adjustedTextPosition = endPosition +
             Offset(
-              -tp.width / 3,
-              -tp.height / 2,
+              sectionCenterAngle > 90  && sectionCenterAngle < 270 ? -tp.width : 0,
+              0,
             ).translate(
               math.cos(angleAdjustment) * 11,
               // Increased from 5 to 8 for a slight move away
