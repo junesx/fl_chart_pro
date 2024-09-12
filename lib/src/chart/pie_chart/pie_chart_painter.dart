@@ -470,7 +470,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     final bool isBottomSide = sectionCenterAngle < 120 && sectionCenterAngle > 60;
 
     // Adjust the angle slightly for segments near the edges to ensure the line points outward
-    final double endAngleAdjustment = isBottomSide ? 0.0 : isLeftSide ? -30.0 : 30.0;
+    final double endAngleAdjustment = isBottomSide?60.0: isLeftSide ? -30.0 : 30.0;
 
     // Handle both percentage-based and fixed length values
     final double lineLength = (settings.length is String)
