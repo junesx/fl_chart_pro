@@ -396,15 +396,15 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
           text: section.title,
         );
 
-        final tp = sectionCenterAngle > 90  && sectionCenterAngle < 270
-            ? TextPainter( //left side
-                text: span,
-                textAlign: TextAlign.right,
-                textDirection: TextDirection.ltr,
-                textScaler: holder.textScaler)
-            : TextPainter( // right side
+        final tp = sectionCenterAngle <120 || sectionCenterAngle > 270
+            ? TextPainter( //right side
                 text: span,
                 textAlign: TextAlign.left,
+                textDirection: TextDirection.ltr,
+                textScaler: holder.textScaler)
+            : TextPainter( // left side
+                text: span,
+                textAlign: TextAlign.right,
                 textDirection: TextDirection.ltr,
                 textScaler: holder.textScaler,
               )
@@ -416,11 +416,13 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
           endPosition.dx - sectionCenterOffsetTitle.dx,
         );
 
+
+
         // Calculate the offset based on the angle and position the text above the connector line
         final Offset adjustedTextPosition = endPosition +
             Offset(
-              sectionCenterAngle > 90  && sectionCenterAngle < 270 ? -tp.width : 0,
-              0,
+               sectionCenterAngle <120 || sectionCenterAngle > 270 ? -6 : -tp.width,
+              sectionCenterAngle < 180 ? tp.height/2: tp.height/3,
             ).translate(
               math.cos(angleAdjustment) * 11,
               // Increased from 5 to 8 for a slight move away
@@ -465,7 +467,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
         );
 
     // Determine the direction for the second line based on the section's position
-    final bool isLeftSide = sectionCenterAngle > 90 && sectionCenterAngle < 270;
+    final bool isLeftSide = !(sectionCenterAngle <120 || sectionCenterAngle > 270);
 
     // Adjust the angle slightly for segments near the edges to ensure the line points outward
     final double endAngleAdjustment = isLeftSide ? -30.0 : 30.0;
