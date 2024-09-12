@@ -402,7 +402,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
                 textAlign: TextAlign.right,
                 textDirection: TextDirection.ltr,
                 textScaler: holder.textScaler)
-            : TextPainter( // right side
+            : TextPainter( //  right side
                 text: span,
                 textAlign: TextAlign.left,
                 textDirection: TextDirection.ltr,
