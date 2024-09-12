@@ -396,7 +396,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
           text: section.title,
         );
 
-        final tp = sectionCenterAngle > 90 && sectionCenterAngle < 270
+        final tp = sectionCenterAngle > 90  && sectionCenterAngle < 270
             ? TextPainter( //left side
                 text: span,
                 textAlign: TextAlign.right,
