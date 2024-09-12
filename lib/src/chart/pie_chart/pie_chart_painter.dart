@@ -346,11 +346,11 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
   /// - badge widget positions
   @visibleForTesting
   void drawTexts(
-      BuildContext context,
-      CanvasWrapper canvasWrapper,
-      PaintHolder<PieChartData> holder,
-      double centerRadius,
-      ) {
+    BuildContext context,
+    CanvasWrapper canvasWrapper,
+    PaintHolder<PieChartData> holder,
+    double centerRadius,
+  ) {
     final data = holder.data;
     final viewSize = canvasWrapper.size;
     final center = Offset(viewSize.width / 2, viewSize.height / 2);
@@ -365,16 +365,16 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
 
       Offset sectionCenter(double percentageOffset) =>
           center +
-              Offset(
-                math.cos(Utils().radians(sectionCenterAngle)) *
-                    (centerRadius + (section.radius * percentageOffset)),
-                math.sin(Utils().radians(sectionCenterAngle)) *
-                    (centerRadius + (section.radius * percentageOffset)),
-              );
+          Offset(
+            math.cos(Utils().radians(sectionCenterAngle)) *
+                (centerRadius + (section.radius * percentageOffset)),
+            math.sin(Utils().radians(sectionCenterAngle)) *
+                (centerRadius + (section.radius * percentageOffset)),
+          );
 
       // Calculate the center offset for the title (label) position
       final sectionCenterOffsetTitle =
-      sectionCenter(section.titlePositionPercentageOffset);
+          sectionCenter(section.titlePositionPercentageOffset);
 
       // Draw the connector line and get the end position
       Offset endPosition = sectionCenterOffsetTitle;
@@ -395,12 +395,20 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
           style: Utils().getThemeAwareTextStyle(context, section.titleStyle),
           text: section.title,
         );
-        final tp = TextPainter(
-          text: span,
-          textAlign: TextAlign.center,
-          textDirection: TextDirection.ltr,
-          textScaler: holder.textScaler,
-        )..layout();
+
+        final tp = sectionCenterAngle > 90 && sectionCenterAngle < 270
+            ? TextPainter( //left side
+                text: span,
+                textAlign: TextAlign.right,
+                textDirection: TextDirection.ltr,
+                textScaler: holder.textScaler)
+            : TextPainter( // right side
+                text: span,
+                textAlign: TextAlign.left,
+                textDirection: TextDirection.ltr,
+                textScaler: holder.textScaler,
+              )
+          ..layout();
 
         // Calculate the angle to rotate the text based on the connector line's angle
         final double angleAdjustment = math.atan2(
@@ -414,8 +422,10 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
               -tp.width / 3,
               -tp.height / 2,
             ).translate(
-              math.cos(angleAdjustment) * 11,  // Increased from 5 to 8 for a slight move away
-              math.sin(angleAdjustment) * 11,  // Increased from 5 to 8 for a slight move away
+              math.cos(angleAdjustment) * 11,
+              // Increased from 5 to 8 for a slight move away
+              math.sin(angleAdjustment) *
+                  11, // Increased from 5 to 8 for a slight move away
             );
 
         // Draw the text at the calculated position
@@ -427,30 +437,32 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
   }
 
   Offset _drawConnectorLine(
-      CanvasWrapper canvas,
-      Offset start,
-      FLConnectorLineSettings settings,
-      double sectionCenterAngle,
-      Offset center,
-      double radius,
-      ) {
+    CanvasWrapper canvas,
+    Offset start,
+    FLConnectorLineSettings settings,
+    double sectionCenterAngle,
+    Offset center,
+    double radius,
+  ) {
     // Adjust the start position to be slightly closer to the outer edge
     final double adjustedRadius = radius - 0.5;
 
     // Calculate the start position on the adjusted outer edge of the pie chart
-    final Offset startPosition = center + Offset(
-      math.cos(Utils().radians(sectionCenterAngle)) * adjustedRadius,
-      math.sin(Utils().radians(sectionCenterAngle)) * adjustedRadius,
-    );
+    final Offset startPosition = center +
+        Offset(
+          math.cos(Utils().radians(sectionCenterAngle)) * adjustedRadius,
+          math.sin(Utils().radians(sectionCenterAngle)) * adjustedRadius,
+        );
 
     // Define the curve offset length
     final double curveLength = 10.0;
 
     // Calculate the first point where the line bends (extends outward)
-    final Offset curvePosition = startPosition + Offset(
-      math.cos(Utils().radians(sectionCenterAngle)) * curveLength,
-      math.sin(Utils().radians(sectionCenterAngle)) * curveLength,
-    );
+    final Offset curvePosition = startPosition +
+        Offset(
+          math.cos(Utils().radians(sectionCenterAngle)) * curveLength,
+          math.sin(Utils().radians(sectionCenterAngle)) * curveLength,
+        );
 
     // Determine the direction for the second line based on the section's position
     final bool isLeftSide = sectionCenterAngle > 90 && sectionCenterAngle < 270;
@@ -464,10 +476,13 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
         : (settings.length is double ? settings.length as double : 15.0);
 
     // Calculate the end position for the label connector based on the parsed length
-    final Offset endPosition = curvePosition + Offset(
-      math.cos(Utils().radians(sectionCenterAngle + endAngleAdjustment)) * lineLength,
-      math.sin(Utils().radians(sectionCenterAngle + endAngleAdjustment)) * lineLength,
-    );
+    final Offset endPosition = curvePosition +
+        Offset(
+          math.cos(Utils().radians(sectionCenterAngle + endAngleAdjustment)) *
+              lineLength,
+          math.sin(Utils().radians(sectionCenterAngle + endAngleAdjustment)) *
+              lineLength,
+        );
 
     final paint = Paint()
       ..color = settings.color ?? Colors.black
@@ -488,7 +503,8 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     if (length.endsWith('%')) {
       final percentageValue = double.tryParse(length.replaceAll('%', ''));
       if (percentageValue != null) {
-        return (percentageValue / 100) * 30.0; // Scale this multiplier as needed
+        return (percentageValue / 100) *
+            30.0; // Scale this multiplier as needed
       }
     }
     // Default to a fixed value if parsing fails
