@@ -420,7 +420,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
         final Offset adjustedTextPosition = endPosition +
             Offset(
               sectionCenterAngle > 90  && sectionCenterAngle < 270?-tp.width:0,
-              sectionCenterAngle<180? -tp.height:-tp.height / 2,
+              sectionCenterAngle<180? -tp.height:-tp.height*4 / 5,
             ).translate(
               math.cos(angleAdjustment) * 11,
               // Increased from 5 to 8 for a slight move away
