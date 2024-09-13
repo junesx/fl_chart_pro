@@ -422,10 +422,10 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
               sectionCenterAngle > 90  && sectionCenterAngle < 270?-tp.width:0,
               -tp.height,
             ).translate(
-              math.cos(angleAdjustment) * 11,
+              math.cos(angleAdjustment) * 4,
               // Increased from 5 to 8 for a slight move away
               math.sin(angleAdjustment) *
-                  11, // Increased from 5 to 8 for a slight move away
+                  4, // Increased from 5 to 8 for a slight move away
             );
 
         // Draw the text at the calculated position
