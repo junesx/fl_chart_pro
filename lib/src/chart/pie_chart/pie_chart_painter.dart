@@ -465,12 +465,12 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
         );
 
     // Determine the direction for the second line based on the section's position
-    final bool isLeftSide = sectionCenterAngle > 90 && sectionCenterAngle < 270;
+    final bool isLeftSide = sectionCenterAngle %180 < 90;
 
-    final bool isBottomSide = sectionCenterAngle < 120 && sectionCenterAngle > 60;
+    final rate = sectionCenterAngle % 90 == 0? 2 : 1;
 
     // Adjust the angle slightly for segments near the edges to ensure the line points outward
-    final double endAngleAdjustment = isBottomSide?60.0: isLeftSide ? -30.0 : 30.0;
+    final double endAngleAdjustment = isLeftSide ? -30.0*rate : 30.0*rate;
 
     // Handle both percentage-based and fixed length values
     final double lineLength = (settings.length is String)
